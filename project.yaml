@@ -3,39 +3,54 @@ name: frontier-evm-starter-project
 version: 1.0.0
 runner:
   node:
-    name: "@subql/node"
-    version: ">=0.35.0"
+    name: "@subql/node-cosmos"
+    version: "*"
   query:
     name: "@subql/query"
     version: ">=0.16.0"
 description: >-
-  A basic Frontier EVM example project with an event and call handler. Read more about this at https://university.subquery.network/build/substrate-evm.html. This project can be use as a starting point for developing your SubQuery project
-repository: https://github.com/subquery/tutorials-frontier-evm-starter
+  A basic Ethermint EVM example project with an event and call handler. Read more about this at https://university.subquery.network/build/substrate-evm.html. This project can be use as a starting point for developing your SubQuery project
+repository: https://github.com/subquery/ethermint-evm-starter
 schema:
   file: ./schema.graphql
 network:
-  chainId: "0x401a1f9dca3da46f5c4091016c8a2f26dcea05865116b286f60f668207d1474b" # Genesis hash of Moonriver
-  endpoint: "https://moonriver.api.onfinality.io/public"
+  chainId: "evmos_9001-2" # Genesis hash of Moonriver
+  endpoint: "https://rpc-evmos.whispernode.com"
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-  dictionary: "https://api.subquery.network/sq/subquery/moonriver-dictionary"
-  chaintypes:
-    file: ./dist/chaintypes.js
+  # dictionary: "https://api.subquery.network/sq/subquery/moonriver-dictionary"
+  chainTypes:
+    ethermint.evm.v1:
+      file: "./proto/ethermint/evm/v1/tx.proto"
+      messages:
+        - "MsgEthereumTx"
+        - "LegacyTx"
+        - "AccessListTx"
+        - "DynamicFeeTx"
+    ethermint.evm.v12:
+      file: "./proto/ethermint/evm/v1/evm.proto"
+      messages:
+        - "AccessTuple"
+    google.protobuf:
+      file: "./proto/google/protobuf/any.proto"
+      messages:
+        - "Any"
+
 dataSources:
-  - kind: substrate/FrontierEvm
-    startBlock: 752073
+  - kind: cosmos/EthermintEvm
+    startBlock: 1346388
     processor:
-      file: "./node_modules/@subql/frontier-evm-processor/dist/index.js"
+      file: "./node_modules/@subql/ethermint-evm-processor/dist/index.js"
       options:
         abi: erc20
-        address: "0x6bd193ee6d2104f14f94e2ca6efefae561a4334b" # Solarbeam's token
+        address: "0x1488346419FFc85C6D54E71be80a222971fb2240" # Cronus Finance
     assets:
       erc20:
         file: "./erc20.abi.json"
     mapping:
       file: "./dist/index.js"
       handlers:
-        - handler: handleFrontierEvmEvent
-          kind: substrate/FrontierEvmEvent
+        - handler: handleEthermintEvmEvent
+          kind: cosmos/EthermintEvmEvent
           filter:
             topics:
               ## Example valid values:
@@ -46,9 +61,9 @@ dataSources:
               - null
               - null
               - null
-        - handler: handleFrontierEvmCall
-          kind: substrate/FrontierEvmCall
-          filter:
-            function: approve(address to,uint256 value)
+        #- handler: handleEthermintEvmCall
+        #  kind: cosmos/EthermintEvmCall
+        #  filter:
+        #    method: approve(address spender, uint256 amount)
             ## The transaction sender
-            from: "0x6bd193ee6d2104f14f94e2ca6efefae561a4334b"
+            # from: "0xcc29d61e6915b42f7c46465dfc854d63218a5d1a"

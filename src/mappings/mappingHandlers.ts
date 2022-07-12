@@ -1,8 +1,8 @@
 import { Approval, Transaction } from "../types";
 import {
-  FrontierEvmEvent,
-  FrontierEvmCall,
-} from "@subql/frontier-evm-processor";
+  EthermintEvmEvent,
+  EthermintEvmCall,
+} from "@subql/ethermint-evm-processor";
 import { BigNumber } from "ethers";
 
 // Setup types from ABI
@@ -16,8 +16,8 @@ type ApproveCallArgs = [string, BigNumber] & {
   _value: BigNumber;
 };
 
-export async function handleFrontierEvmEvent(
-  event: FrontierEvmEvent<TransferEventArgs>
+export async function handleEthermintEvmEvent(
+  event: EthermintEvmEvent<TransferEventArgs>
 ): Promise<void> {
   const transaction = new Transaction(event.transactionHash);
 
@@ -29,8 +29,8 @@ export async function handleFrontierEvmEvent(
   await transaction.save();
 }
 
-export async function handleFrontierEvmCall(
-  event: FrontierEvmCall<ApproveCallArgs>
+export async function handleEthermintEvmCall(
+  event: EthermintEvmCall<ApproveCallArgs>
 ): Promise<void> {
   const approval = new Approval(event.hash);
 
