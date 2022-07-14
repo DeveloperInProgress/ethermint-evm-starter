@@ -37,12 +37,12 @@ network:
 
 dataSources:
   - kind: cosmos/EthermintEvm
-    startBlock: 1346388
+    startBlock: 1474211
     processor:
       file: "./node_modules/@subql/ethermint-evm-processor/dist/index.js"
       options:
         abi: erc20
-        address: "0x1488346419FFc85C6D54E71be80a222971fb2240" # Cronus Finance
+        address: "0xD4949664cD82660AaE99bEdc034a0deA8A0bd517" # wevmos
     assets:
       erc20:
         file: "./erc20.abi.json"
@@ -57,13 +57,13 @@ dataSources:
               # - '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
               # - Transfer(address,address,u256)
               # - Transfer(address from,address to,uint256 value)
-              - Transfer(address indexed from,address indexed to,uint256 value)
+              - Transfer(address indexed src, address indexed dst, uint256 wad)
               - null
               - null
               - null
         #- handler: handleEthermintEvmCall
         #  kind: cosmos/EthermintEvmCall
         #  filter:
-        #    method: approve(address spender, uint256 amount)
+        #    method: approve(address guy, uint256 wad)
             ## The transaction sender
-            # from: "0xcc29d61e6915b42f7c46465dfc854d63218a5d1a"
+            # from: "0x86ed94fb8fffe265caf38cbefb0431d2fbf862c1"
